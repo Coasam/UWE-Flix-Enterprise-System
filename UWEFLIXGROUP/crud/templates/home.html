@@ -1,24 +1,41 @@
 {% extends 'base.html' %} {% block content %}
 <div class="container mt-3 pt-5">
+  {% if user.is_clubrepresentative %}
+  <h2>Welcome, <strong><a href="{% url 'clubDetailPage' user.id %}">{{ user.get_username }}</a></strong></h2>
+  {% else %}
   <h2>Welcome, <strong>{{ user.get_username }}</strong></h2>
+  {% endif %}
 
   <div class="swiper mySwiper mt-5">
     <div class="swiper-wrapper">
       {% for film in films %}
       <div class="swiper-slide d-flex flex-column py-5">
-        
-        {% comment %} <img src="{{ film.image }}" alt="" class="img-fluid" /> {% endcomment %}
 
-        <img src="{{ film.image.url }}" alt="" class="img-fluid" />
-        <h1>{{ film.title }}</h1>
-        <p>{{ film.description }}</p>
-        <p>{{ film.duration }}s</p>
-        <p>{{ film.rating }}</p>
+        {% comment %} <img src="{{ film.image }}" alt="" class="img-fluid" /> {% endcomment %}
+        <a href="{% url 'filmDetailPage' film.id %}" class="link-style">
+          {% if film.image %}
+          <img src="{{ film.image.url }}" alt="" class="img-fluid" />
+          {% else %}
+          <img src="{{ film.image }}" alt="" class="img-fluid" />
+          {% endif %}
+          <h1>{{ film.title }}</h1>
+          <p>{{ film.description }}</p>
+          <p>{{ film.duration }} m</p>
+          <p>{{ film.rating }}</p>
+        </a>
 
         <button class="btn btn-primary text-white">
             <a href="{{ film.trailer }}" target="_blank">Trailer</a>
         </button>
-        
+        <br>
+        {% for showing in film.filmshowings_set.all %}
+        {% if user.is_clubrepresentative %}
+        <button class="btn btn-danger text-white">
+            <a href="{% url 'deleteFilmWithNoShowings' showing.id %}">Delete</a>
+        </button>
+        {% endif %}
+        {% endfor %}
+
       </div>
       {% endfor %}
     </div>
@@ -60,5 +77,16 @@
     height: 100%;
     object-fit: cover;
   }
+
+  .link-style {
+  text-decoration: none;
+  color: #0077FF;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+}
+
+.link-style:hover {
+  color: #0044CC;
+}
 </style>
 {% endblock %}
