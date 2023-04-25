@@ -1,0 +1,43 @@
+<div class="modal fade" id="chooseTicketModal" tabindex="-1" aria-labelledby="chooseTicketModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="chooseTicketModalLabel">Choose Number of Tickets for the Film </h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+  
+        <div class="modal-body">
+  
+        <div class="form-group">
+            <label for="quantity">Adult Tickets: {{ tickets.ticket_price }}</label>
+            <input type="number" id = "quantity" min = "1" max = "10" name="tickets.ticketquantity" class="form-control">
+          </div>
+  
+        <div class="form-group">
+            <label for="quantity">Child Tickets: {{ tickets.ticket_price }}</label>
+            <input type="number" id = "quantity" min = "1" max = "10" name="tickets.ticketquantity" class="form-control">
+          </div>
+  
+        <div class="form-group">
+            <label for="quantity">Student Tickets: {{ tickets.ticket_price }}</label>
+            <input type="number" id = "quantity" min = "1" max = "10" name=".ticketquantity" class="form-control">
+          </div>
+  
+        <div class="form-group">
+            <label for="quantity">Club Tickets for Club Repersentatives only: {{ tickets.ticket_price }}</label>
+            <input type="number" id = "quantity" min = "10" name="tickets.ticketquantity" class="form-control">
+          </div>
+  
+          <div class="form-group">
+            <label for="customerdiscount"> Valid Discounts </label>
+            <input type= "text" id = "customerdiscount" maxlength = "10" name="" class="form-control">
+          </div>
+  
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Proceed to Checkout</button>
+        </div>
+      </div>
+    </div>
+  </div>
