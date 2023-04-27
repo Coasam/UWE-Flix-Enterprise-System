@@ -9,27 +9,27 @@
 
         <div class="form-group">
           <label for="">Title</label>
-          <input type="text" name="film.title" class="form-control">
+          <input type="text" name="title" class="form-control">
         </div>
 
         <div class="form-group">
           <label for="">Rating</label>
-          <input type="text" name="film.rating" class="form-control">
+          <input type="text" name="rating" class="form-control">
         </div>
 
         <div class="form-group">
           <label for="">Duration</label>
-          <input type="text" name="film.duration" class="form-control">
+          <input type="text" name="duration" class="form-control">
         </div>
 
         <div class="mb-3">
-          <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="film.description"></textarea>
+          <label for="description" class="form-label">Description</label>
+          <textarea class="form-control" id="description" rows="3" name="description"></textarea>
         </div>
 
         <div class="mb-3">
           <label for="formFile" class="form-label">Image</label>
-          <input class="form-control" type="file" id="formFile" name="film.image">
+          <input class="form-control" type="file" id="formFile" name="image" accept="image/*">
         </div>
 
         <div class="form-group">
@@ -45,3 +45,23 @@
     </div>
   </div>
 </div>
+
+<script>
+$('#createFilmModal').on('click', '.btn-primary', function() {
+  var form = $('#createFilmModal').find('form');
+  var formData = new FormData(form[0]);
+  $.ajax({
+    url: '/api/v1/film',
+    type: 'POST',
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function(data) {
+      console.log(data);
+    },
+    error: function(data) {
+      console.log(data);
+    }
+  });
+});
+</script>

@@ -19,7 +19,7 @@ class Representative(models.Model):
     date_of_birth = models.DateField()
 
 class Club(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=50)
     street = models.CharField(max_length = 50)
     street_num = models.IntegerField()
@@ -27,7 +27,8 @@ class Club(models.Model):
     postcode = models.CharField(max_length=8)
     landline_no = models.CharField(max_length=15)
     mobile_no = models.CharField(max_length=15)
-    representative = models.ForeignKey(Representative, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    representative = models.ForeignKey(Representative, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -66,11 +67,17 @@ class Film(models.Model):
 
 class Screen(models.Model):
    capacity = models.IntegerField(default=0)
-   
+
 class FilmShowings(models.Model):
    movie = models.ForeignKey(Film, default=1, on_delete=models.CASCADE)
    screen = models.ForeignKey(Screen, default=1, on_delete=models.CASCADE)
    film_date = models.DateField()
    ticket_quantity = models.IntegerField(default=150)
 
+class Tickets(models.Model):
+    ticketid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    ticket_price = models.DecimalField(max_digits=5, decimal_places=2)
+    ticket_quantity = models.PositiveIntegerField()
+    film_title = models.CharField(max_length=100)
+    film_duration = models.IntegerField(default=0)
 

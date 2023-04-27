@@ -1,0 +1,50 @@
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="paymentModalLabel">Payment</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+            <div class="form-group">
+                <label for="">First Name</label>
+                <input type="text" name="customer.first_name" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="">Last Name</label>
+                <input type="text" name="customer.last_name" class="form-control">
+            </div>
+
+
+            <div class="form-group">
+                <label for="card_number">Card Number</label>
+                <input type="tel" name="customer_card_number" id = "card_number" minlength = "16" maxlength = "19" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="expiry_date">Expiry Date</label>
+                <input type="month" name="customer_card_expiry" id = "expiry_date" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="cvv_number">CVV</label>
+                <input type="password" name="customer_card_cvv" id = "cvv_number" minlength = "3" maxlength = "3" class="form-control">
+            </div>
+
+            </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary">Complete Payment</button>
+        </div>
+      </div>
+    </div>
+</div>    
+
+
+            
+
+              
+
+       
