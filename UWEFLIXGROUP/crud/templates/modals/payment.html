@@ -9,7 +9,7 @@
 
             <div class="form-group">
                 <label for="">Full Name</label>
-                <input type="text" name="customer.full_name" class="form-control">
+                <input type="text" name="full_name" class="form-control">
             </div>
 
             <div class="form-group">
@@ -41,7 +41,7 @@
     document.querySelector("#paymentModal button.btn-primary").addEventListener("click", function(event) {
         // Get the input fields
         
-        var fullName = document.querySelector("#paymentModal input[name='customer.full_name']");
+        var fullName = document.querySelector("#paymentModal input[name='full_name']");
         var cardNumber = document.querySelector("#paymentModal input[name='customer_card_number']");
         var expiryDate = document.querySelector("#paymentModal input[name='customer_card_expiry']");
         var cvvNumber = document.querySelector("#paymentModal input[name='customer_card_cvv']");

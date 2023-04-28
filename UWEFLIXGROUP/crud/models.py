@@ -46,7 +46,6 @@ class AccountManager(models.Model):
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     title = models.CharField(max_length=4)
-    full_name = models.CharField(max_length=100)
     # first_name = models.CharField(max_length=100)
     # last_name = models.CharField(max_length=100)
     date_of_birth = models.DateField()
