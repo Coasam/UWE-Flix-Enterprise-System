@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.contrib.auth import login as login2, authenticate, logout as logout2
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.csrf import csrf_exempt
@@ -246,11 +246,14 @@ def logout(request):
 def club_showings(request):
     #function to only show certain dates
     if request.method == 'POST':
-        selected_date = request.POST['showing_date']
+        selected_date = request.POST.get('showing_date', None)
+        try:
+            showings = FilmShowings.objects.filter(film_date = selected_date)
+            return render(request, 'club_showings.html', showings, selected_date)
+        except:
+            # Make error a popup boxn instead
+            return HttpResponse('error')
 
-    showings = FilmShowings.objects.filter(film_date = selected_date)
-
-    return render(request, 'club_showings.html', showings, selected_date)
 
 #Club Rep
 def club_account(request):

@@ -1,3 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
+
+<h2> Shows on: <strong>{{ selected_date }}</strong> </h2>
+
+    {% for item in showings %}
+    <div class="swiper-slide d-flex flex-column py-5">
+        <h1>{{ item.movie }}</h1>
+        <p>{{ item.screen }}</p>
+        <p>{{ item.film_date }} m</p>
+        <p>{{ item.ticket_quantity }}</p>
+    {% endfor %}
 {% endblock %}

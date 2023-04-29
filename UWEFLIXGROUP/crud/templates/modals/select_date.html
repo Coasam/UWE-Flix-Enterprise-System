@@ -9,12 +9,11 @@
 
         </div>		
 
-            <form method="post" class="font-weight-light">
+            <form method="post" class="font-weight-light" action="/club_showings/">
                 <h2 class="font-weight-bold mb-3 text-center">
                     Select Date
                 </h2>
                 {% csrf_token %}
-				<!-- Display Error if exists -->
 				{% if error %}
 				<div class="alert alert-danger" role="alert">
 					{{ error }}
@@ -26,7 +25,7 @@
                         <label for="date">Select Showing</label>
                         <input type="date" class="form-control" id="date" name="showing_date">
                     </div>
-                    <input type="submit" value="Select a Date" class="btn btn-info mt-5 w-100 fw-bold" />
+                    <button type="submit" class="btn btn-info mt-5 w-100 fw-bold">Select Date</button>
                 </div>
             
             </form>
