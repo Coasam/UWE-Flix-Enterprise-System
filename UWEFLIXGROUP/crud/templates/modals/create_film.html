@@ -6,62 +6,79 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="">Title</label>
+            <input type="text" name="title" class="form-control">
+          </div>
 
-        <div class="form-group">
-          <label for="">Title</label>
-          <input type="text" name="title" class="form-control">
+          <div class="form-group">
+            <label for="">Rating</label>
+            <select class="form-select" aria-label="Movie Age Rating">
+              <option selected>Choose...</option>
+              <option value="U">U</option>
+              <option value="PG">PG</option>
+              <option value="12">12</option>
+              <option value="15">15</option>
+              <option value="18">18</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="">Duration</label>
+            <input type="text" name="duration" class="form-control">
+          </div>
+
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" rows="3" name="description"></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="formFile" class="form-label">Image</label>
+            <input class="form-control" type="file" name="image" accept="image/*">
+          </div>
+
+          <div class="form-group">
+            <label for="">Trailer</label>
+            <input type="text" name="trailer" class="form-control">
+          </div>
+
         </div>
-
-        <div class="form-group">
-          <label for="">Rating</label>
-          <input type="text" name="rating" class="form-control">
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button id="createFilmBtn" type="submit" class="btn btn-primary">Add Film</button>
         </div>
-
-        <div class="form-group">
-          <label for="">Duration</label>
-          <input type="text" name="duration" class="form-control">
-        </div>
-
-        <div class="mb-3">
-          <label for="description" class="form-label">Description</label>
-          <textarea class="form-control" id="description" rows="3" name="description"></textarea>
-        </div>
-
-        <div class="mb-3">
-          <label for="formFile" class="form-label">Image</label>
-          <input class="form-control" type="file" id="formFile" name="image" accept="image/*">
-        </div>
-
-        <div class="form-group">
-          <label for="">Trailer</label>
-          <input type="text" name="trailer" class="form-control">
-        </div>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+      </form>
     </div>
   </div>
 </div>
 
+{% block scripts %}
 <script>
-$('#createFilmModal').on('click', '.btn-primary', function() {
-  var form = $('#createFilmModal').find('form');
-  var formData = new FormData(form[0]);
+// Send API request to /api/v1/films
+$('#createFilmModal form').submit(function(e) {
+  e.preventDefault();
+
+  const formData = new FormData(this);
+
+  console.log(formData)
+
   $.ajax({
     url: '/api/v1/film',
     type: 'POST',
     data: formData,
-    processData: false,
-    contentType: false,
-    success: function(data) {
+    success: function (data) {
       console.log(data);
     },
-    error: function(data) {
+    error: function (data) {
       console.log(data);
-    }
+    },
+    cache: false,
+    contentType: false,
+    processData: false
   });
 });
+
 </script>
+{% endblock %}
