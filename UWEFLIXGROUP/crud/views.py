@@ -7,7 +7,7 @@ from django.core.exceptions import PermissionDenied
 
 
 from .models import User, Customer, FilmShowings, Film, Club
-from .forms import LoginForm, CustomerForm, FilmForm, ClubForm
+from .forms import LoginForm, CustomerForm, FilmForm, ClubForm, ShowingForm
 
 @login_required(login_url='/auth')
 def home(request):
@@ -243,10 +243,14 @@ def logout(request):
     return HttpResponseRedirect('/auth')
 
 # Booking system
-def showings(request):
+def club_showings(request):
     #function to only show certain dates
-    #showings = Film.objects.filter(film_date = selected_date)
-    return render(request, 'screenings.html')
+    if request.method == 'POST':
+        selected_date = request.POST['showing_date']
+
+    showings = FilmShowings.objects.filter(film_date = selected_date)
+
+    return render(request, 'club_showings.html', showings, selected_date)
 
 #Club Rep
 def club_account(request):

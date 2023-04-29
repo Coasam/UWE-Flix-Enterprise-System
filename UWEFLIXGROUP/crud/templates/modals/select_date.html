@@ -1,0 +1,35 @@
+<div class="modal fade" id="selectDateModal" tabindex="-1" aria-labelledby="selectDateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="selectDateModalLabel"> Select Date for Showings</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+        </div>		
+
+            <form method="post" class="font-weight-light">
+                <h2 class="font-weight-bold mb-3 text-center">
+                    Select Date
+                </h2>
+                {% csrf_token %}
+				<!-- Display Error if exists -->
+				{% if error %}
+				<div class="alert alert-danger" role="alert">
+					{{ error }}
+				</div>
+				{% endif %}
+
+                <div class="px-2 mb-4">
+                    <div class="form-group mt-4">
+                        <label for="date">Select Showing</label>
+                        <input type="date" class="form-control" id="date" name="showing_date">
+                    </div>
+                    <input type="submit" value="Select a Date" class="btn btn-info mt-5 w-100 fw-bold" />
+                </div>
+            
+            </form>
+        </div>
+    </div>
+</div>

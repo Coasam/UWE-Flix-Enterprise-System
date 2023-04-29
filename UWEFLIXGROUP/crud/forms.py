@@ -56,3 +56,6 @@ class ClubForm(forms.Form):
     postcode = forms.CharField(max_length=8)
     landline_no = forms.CharField(max_length=15)
     mobile_no = forms.CharField(max_length=15)
+
+class ShowingForm(forms.Form):
+    date = forms.DateField()
