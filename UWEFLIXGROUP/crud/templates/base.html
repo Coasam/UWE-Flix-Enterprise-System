@@ -75,7 +75,17 @@
             </button>
           {% endif %}
 
-
+          {% if user.is_accountmanager %}
+            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editClubModal">
+              View Accounts
+            </button>
+          {% endif %}
+          
+          {% if user.is_clubrepresentitive%}
+            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editClubModal">
+              View Club Funds
+            </button>
+          {% endif %}
 
         </div>
       </div>

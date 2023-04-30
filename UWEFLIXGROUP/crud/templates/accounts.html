@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-3 pt-5">
+  <h2>Welcome, <strong>{{ user.get_username }}</strong></h2>
+
+  <div class="row mt-5">
+    <div class="col-md-6">
+        {% for users in user %}
+        <p>{{ users }}</p>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
