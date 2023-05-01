@@ -1,10 +1,9 @@
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login as login2, authenticate, logout as logout2
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect, JsonResponse
 from django.core.exceptions import PermissionDenied
-from django.db.models import Q
 
 
 from .models import User, Customer, FilmShowings, Film, Club
@@ -250,8 +249,9 @@ def club_showings(request):
     if request.method == 'POST':
         selected_date = request.POST.get('showing_date', None)
         try:
-            showings = FilmShowings.objects.get(ticket_quantity = club_ticket_min, film_date = selected_date)
-            context = {'selected_date': selected_date, 'showings': showings}
+            showings = FilmShowings.objects.filter(film_date = selected_date)
+            avail_showings=showings.filter(ticket_quantity__gte=club_ticket_min)
+            context = {'selected_date': selected_date, 'showings': avail_showings}
             return render(request, 'showings.html', context)
         except FilmShowings.DoesNotExist:
                 context = {'selected_date': selected_date}
