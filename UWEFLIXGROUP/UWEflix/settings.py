@@ -87,6 +87,7 @@ DATABASES = {
             'database': 'project',
             'user': 'root',
             'password': 'root',
+            # 'host': 'localhost',
             'host': 'db',
             'port': 3000,
         },

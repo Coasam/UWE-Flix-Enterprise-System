@@ -8,15 +8,9 @@
         <div class="modal-body">
 
             <div class="form-group">
-                <label for="">First Name</label>
-                <input type="text" name="customer.first_name" class="form-control">
+                <label for="">Full Name</label>
+                <input type="text" name="full_name" class="form-control">
             </div>
-
-            <div class="form-group">
-                <label for="">Last Name</label>
-                <input type="text" name="customer.last_name" class="form-control">
-            </div>
-
 
             <div class="form-group">
                 <label for="card_number">Card Number</label>
@@ -41,10 +35,46 @@
       </div>
     </div>
 </div>    
+  
+
+<script>
+    document.querySelector("#paymentModal button.btn-primary").addEventListener("click", function(event) {
+        // Get the input fields
+        
+        var fullName = document.querySelector("#paymentModal input[name='full_name']");
+        var cardNumber = document.querySelector("#paymentModal input[name='customer_card_number']");
+        var expiryDate = document.querySelector("#paymentModal input[name='customer_card_expiry']");
+        var cvvNumber = document.querySelector("#paymentModal input[name='customer_card_cvv']");
+
+        // Check if all fields are valid
+        if (fullName.value.trim() == "") {
+            alert("Please enter your full name.");
+            event.preventDefault();
+            return false;
+        }
+        if (cardNumber.value.trim() == "" || (cardNumber.value.trim().length < 16 || cardNumber.value.trim().length > 19)) {
+            alert("Please enter a valid card number.");
+            event.preventDefault();
+            return false;
+        }
+        if (expiryDate.value.trim() == "") {
+            alert("Please enter a valid expiry date.");
+            event.preventDefault();
+            return false;
+        }
+        if (cvvNumber.value.trim() == "" || cvvNumber.value.trim().length != 3) {
+            alert("Please enter a valid CVV number.");
+            event.preventDefault();
+            return false;
+        }
+
+        // If all fields are valid, submit the form
+        return true;
+    });
+</script>
 
 
-            
 
-              
+
 
        

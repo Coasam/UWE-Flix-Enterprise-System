@@ -23,12 +23,16 @@ urlpatterns = [
     path('auth', crud.login),
     path('auth/rep', crud.representative_login),
     path('auth/register', crud.register_customer),
+    path('auth/club/register/', crud.register_club, name="register_club"),
     path('logout', crud.logout),
     path('', crud.home, name='home'),
+    path('film-detail/<str:id>/', crud.filmDetailPage, name='filmDetailPage'),
+    path('club-rep-detail/<str:id>/', crud.clubDetailPage, name='clubDetailPage'),
     path('admin/', admin.site.urls),
     path('showings/', crud.showings),
+    path('delete-film-with-no-showings/<str:id>/', crud.deleteFilmWithNoShowings, name="deleteFilmWithNoShowings"),
     path('club_account/', crud.club_account),
-
+    path('accounts', crud.account_manager),
     # REST API
     path('api/v1/film', crud.create_film),
 

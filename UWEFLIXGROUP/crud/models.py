@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
 
-# Account Manager Models - Samuel
-
 # Extend the User model to add the following fields:
 class User(AbstractUser):
     is_customer = models.BooleanField(default=False)
@@ -19,7 +17,7 @@ class Representative(models.Model):
     date_of_birth = models.DateField()
 
 class Club(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=50)
     street = models.CharField(max_length = 50)
     street_num = models.IntegerField()
@@ -27,7 +25,8 @@ class Club(models.Model):
     postcode = models.CharField(max_length=8)
     landline_no = models.CharField(max_length=15)
     mobile_no = models.CharField(max_length=15)
-    representative = models.ForeignKey(Representative, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    representative = models.ForeignKey(Representative, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -64,12 +63,9 @@ class Film(models.Model):
    image = models.ImageField(upload_to='uploads/films', default='uploads/films/no-img.jpg')
    trailer = models.URLField(default='https://www.youtube.com/watch?v=dQw4w9WgXcQ')
 
-class Screen(models.Model):
-   capacity = models.IntegerField(default=0)
-   
 class FilmShowings(models.Model):
    movie = models.ForeignKey(Film, default=1, on_delete=models.CASCADE)
-   screen = models.ForeignKey(Screen, default=1, on_delete=models.CASCADE)
+   screen = models.IntegerField(default=1)
    film_date = models.DateField()
    ticket_quantity = models.IntegerField(default=150)
 

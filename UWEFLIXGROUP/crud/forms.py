@@ -17,6 +17,7 @@ class ShowingForm(forms.Form):
     film = forms.IntegerField()
     screen = forms.IntegerField()
     film_date = forms.DateInput()
+    film_time = forms.TimeInput()
     ticket_quantity = forms.IntegerField()
 
 class CustomerForm(forms.Form):
@@ -48,7 +49,7 @@ class TicketPaymentForm(forms.Form):
     #film_title = forms.CharField(max_length=100)
     #film_duration = forms.IntegerField()
 
-class Clubrep(forms.Form):
+class ClubForm(forms.Form):
     name = forms.CharField(max_length=50)
     street = forms.CharField(max_length = 50)
     street_num = forms.IntegerField()

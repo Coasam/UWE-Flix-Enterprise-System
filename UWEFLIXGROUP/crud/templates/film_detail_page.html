@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-3 pt-5">
+  <h2>Welcome, <strong>{{ user.get_username }}</strong></h2>
+
+  <div class="row mt-5">
+    <div class="col-md-6">
+      <img src="{{ film_obj.image.url }}" alt="" class="img-fluid">
+    </div>
+    <div class="col-md-6">
+      <h1>{{ film_obj.title }}</h1>
+      <p>{{ film_obj.description }}</p>
+      <p>Duration: {{ film_obj.duration }}s</p>
+      <p>Rating: {{ film_obj.get_rating_display }}</p>
+      <a href="{% url 'home' %}" class="btn btn-secondary">Back to list</a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block css %}
+{{ block.super }}
+
+<style lang="css">
+  .img-fluid {
+    max-height: 400px;
+  }
+</style>
+{% endblock %}
