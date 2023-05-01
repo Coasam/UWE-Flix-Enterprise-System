@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-3 pt-5">
+  <h2>Welcome, <strong>{{ user.get_username }}</strong></h2>
+
+  <div class="row mt-5">
+    <div class="col-md-6">
+       
+      {% for user in users %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col"><h2>Username</h2></th>
+              <th scope="col"><h2>Tickets</h2></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ user }}</td>
+              <td>{{ Tickets }}</td>
+            </tr>
+          </tbody>
+        </table>
+        {% endfor %}
+    
+      </div>
+  </div>
+
+</div>
+{% endblock %}

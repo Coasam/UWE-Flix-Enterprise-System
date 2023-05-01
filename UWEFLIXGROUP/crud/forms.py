@@ -17,6 +17,7 @@ class ShowingForm(forms.Form):
     film = forms.IntegerField()
     screen = forms.IntegerField()
     film_date = forms.DateInput()
+    film_time = forms.TimeInput()
     ticket_quantity = forms.IntegerField()
 
 class CustomerForm(forms.Form):
