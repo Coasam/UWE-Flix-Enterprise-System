@@ -32,6 +32,7 @@ urlpatterns = [
     path('club_showings/', crud.club_showings),
     path('customer_showings/', crud.customer_showings),
     path('delete-film-with-no-showings/<str:id>/', crud.deleteFilmWithNoShowings, name="deleteFilmWithNoShowings"),
+    path('accounts', crud.account_manager),
 
     # REST API
     path('api/v1/film', crud.create_film),
