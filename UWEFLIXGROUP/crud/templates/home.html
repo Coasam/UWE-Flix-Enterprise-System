@@ -9,6 +9,24 @@
   <div class="swiper mySwiper mt-5">
     <div class="swiper-wrapper">
       {% for film in films %}
+      <div class="swiper-slide d-flex flex-column p-4">
+
+        <a href="{% url 'filmDetailPage' film.id %}" class="link-style">
+          {% if film.image %}
+          <img src="{{ film.image.url }}" alt="" class="h-25 mh-100" />
+          {% else %}
+          <img src="{{ film.image }}" alt="" class="img-fluid" />
+          {% endif %}
+          <h3 class="mt-2">{{ film.title }}</h3>
+          <p class="lead">
+            {{ film.description }}
+          </p>
+          <p>
+            {{ film.duration }} m
+          </p>
+          <p>
+            {{ film.rating }}
+          </p>
       <div class="swiper-slide d-flex flex-column py-5">
 
         {% comment %} <img src="{{ film.image }}" alt="" class="img-fluid" /> {% endcomment %}
@@ -67,8 +85,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px;
     border-radius: 10px;
+    max-width: 300px;
   }
 
   .swiper-slide img {

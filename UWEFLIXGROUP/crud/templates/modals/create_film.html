@@ -6,6 +6,12 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        <!-- Error -->
+        <div class="alert alert-danger d-none" role="alert" id="createFilmError">
+          <ul id="createFilmErrorList">
+          </ul>
+        </div>
+
         <form>
           <div class="form-group">
             <label for="">Title</label>
@@ -14,7 +20,7 @@
 
           <div class="form-group">
             <label for="">Rating</label>
-            <select class="form-select" aria-label="Movie Age Rating">
+            <select name="rating" class="form-select" aria-label="Movie Age Rating">
               <option selected>Choose...</option>
               <option value="U">U</option>
               <option value="PG">PG</option>
@@ -25,8 +31,8 @@
           </div>
 
           <div class="form-group">
-            <label for="">Duration</label>
-            <input type="text" name="duration" class="form-control">
+            <label for="">Duration (Minutes)</label>
+            <input type="number" name="duration" class="form-control">
           </div>
 
           <div class="mb-3">
@@ -69,10 +75,21 @@ $('#createFilmModal form').submit(function(e) {
     type: 'POST',
     data: formData,
     success: function (data) {
-      console.log(data);
+      // Close modal
+      $('#createFilmModal').modal('hide');
     },
     error: function (data) {
-      console.log(data);
+      // Show error
+      $('#createFilmError').removeClass('d-none');
+
+      // Clear error list
+      $('#createFilmErrorList').empty();
+
+      // Loop through errors
+      $.each(data.responseJSON.error, function (key, value) {
+        // Append error to list
+        $('#createFilmErrorList').append('<li>' + value + '</li>');
+      });
     },
     cache: false,
     contentType: false,

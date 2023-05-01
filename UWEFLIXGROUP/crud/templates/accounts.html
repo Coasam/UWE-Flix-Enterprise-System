@@ -5,9 +5,25 @@
 
   <div class="row mt-5">
     <div class="col-md-6">
-        {% for users in user %}
-        <p>{{ users }}</p>
-    </div>
+       
+      {% for user in users %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col"><h2>Username</h2></th>
+              <th scope="col"><h2>Tickets</h2></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ user }}</td>
+              <td>{{ Tickets }}</td>
+            </tr>
+          </tbody>
+        </table>
+        {% endfor %}
+    
+      </div>
   </div>
 
 </div>

@@ -53,8 +53,6 @@
           <!-- If user is a cinema manager -->
           {% if user.is_cinemamanager %}
 
-          <!-- https://www.codehim.com/menu/hamburger-dropdown-menu-with-bootstrap-and-jquery/ -->
-
             <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#createViewingModal">
               Create Viewing
             </button>
@@ -76,9 +74,9 @@
           {% endif %}
 
           {% if user.is_accountmanager %}
-            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editClubModal">
-              View Accounts
-            </button>
+            <a href="accounts" class="btn btn-primary btn-md active" role="button" aria-pressed="true">
+              Accounts
+            </a>
           {% endif %}
           
           {% if user.is_clubrepresentitive%}

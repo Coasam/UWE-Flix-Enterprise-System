@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
 
-# Account Manager Models - Samuel
-
 # Extend the User model to add the following fields:
 class User(AbstractUser):
     is_customer = models.BooleanField(default=False)
@@ -70,7 +68,7 @@ class Screen(models.Model):
 
 class FilmShowings(models.Model):
    movie = models.ForeignKey(Film, default=1, on_delete=models.CASCADE)
-   screen = models.ForeignKey(Screen, default=1, on_delete=models.CASCADE)
+   screen = models.IntegerField(default=1)
    film_date = models.DateField()
    ticket_quantity = models.IntegerField(default=150)
 
