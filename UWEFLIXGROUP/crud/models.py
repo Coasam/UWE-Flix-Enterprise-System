@@ -63,6 +63,9 @@ class Film(models.Model):
    image = models.ImageField(upload_to='uploads/films', default='uploads/films/no-img.jpg')
    trailer = models.URLField(default='https://www.youtube.com/watch?v=dQw4w9WgXcQ')
 
+class Screen(models.Model):
+   capacity = models.IntegerField(default=0)
+
 class FilmShowings(models.Model):
    movie = models.ForeignKey(Film, default=1, on_delete=models.CASCADE)
    screen = models.IntegerField(default=1)

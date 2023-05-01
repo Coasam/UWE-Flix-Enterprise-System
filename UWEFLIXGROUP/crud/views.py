@@ -76,6 +76,7 @@ def login(request):
 
         if not user:
             return render(request, 'auth/index.html', {'error': 'Invalid E-Mail or password'})
+            return render(request, 'auth/index.html', {'error': 'Invalid username or password'})
 
         login2(request, user)
 
@@ -243,10 +244,15 @@ def create_viewing(request):
     # Check if the form is valid
     if not form.is_valid():
         return JsonResponse({'error': form.errors}, status=400)
+        return JsonResponse({'error': form.errors})
+
 
     # Get the form data
     data = form.cleaned_data
 
+    # Remove the /uploads/ from the image path
+    data['image'] = data['image'].replace('/uploads/', '')
+    
     # Create the film
     film = Film.objects.create(
         title=data['title'],
@@ -296,3 +302,4 @@ def account_manager(request):
     users = User.objects.all()
 
     return render(request, 'accounts.html', {'users': users})
+

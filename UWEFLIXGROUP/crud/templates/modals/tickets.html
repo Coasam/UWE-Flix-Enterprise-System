@@ -54,6 +54,8 @@
     if (adultQuantity == 0 && childQuantity == 0 && studentQuantity == 0 && clubQuantity == 0) {
       alert("Please select at least one type of ticket.");
       event.preventDefault(); // Prevent the form from submitting
+    } else{
+      window.location.href = "payment.html";
     }
   });
 </script>

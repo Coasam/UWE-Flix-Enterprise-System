@@ -27,6 +27,19 @@
           <p>
             {{ film.rating }}
           </p>
+      <div class="swiper-slide d-flex flex-column py-5">
+
+        {% comment %} <img src="{{ film.image }}" alt="" class="img-fluid" /> {% endcomment %}
+        <a href="{% url 'filmDetailPage' film.id %}" class="link-style">
+          {% if film.image %}
+          <img src="{{ film.image.url }}" alt="" class="img-fluid" />
+          {% else %}
+          <img src="{{ film.image }}" alt="" class="img-fluid" />
+          {% endif %}
+          <h1>{{ film.title }}</h1>
+          <p>{{ film.description }}</p>
+          <p>{{ film.duration }} m</p>
+          <p>{{ film.rating }}</p>
         </a>
 
         <button class="btn btn-primary text-white">
