@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect, JsonResponse
 from django.core.exceptions import PermissionDenied
+from django.db.models import Q
 
 
 from .models import User, Customer, FilmShowings, Film, Club
@@ -244,20 +245,29 @@ def logout(request):
 
 # Booking system
 def club_showings(request):
+    club_ticket_min = 10
     #function to only show certain dates
     if request.method == 'POST':
         selected_date = request.POST.get('showing_date', None)
         try:
-            showings = FilmShowings.objects.filter(film_date = selected_date)
-            return render(request, 'club_showings.html', showings, selected_date)
-        except:
-            # Make error a popup boxn instead
-            return HttpResponse('error')
-
-
-#Club Rep
-def club_account(request):
-    return render(request, 'club_account.html')
+            showings = FilmShowings.objects.get(ticket_quantity = club_ticket_min, film_date = selected_date)
+            context = {'selected_date': selected_date, 'showings': showings}
+            return render(request, 'showings.html', context)
+        except FilmShowings.DoesNotExist:
+                context = {'selected_date': selected_date}
+                return render(request, 'showings.html', context)
+        
+def customer_showings(request):
+    #function to only show certain dates
+    if request.method == 'POST':
+        selected_date = request.POST.get('showing_date', None)
+        try:
+            showings = FilmShowings.objects.get(film_date = selected_date)
+            context = {'selected_date': selected_date, 'showings': showings}
+            return render(request, 'howings.html', context)
+        except FilmShowings.DoesNotExist:
+                context = {'selected_date': selected_date}
+                return render(request, 'showings.html', context)
 
 @login_required(login_url='/auth')
 @user_passes_test(lambda user: user.is_clubrepresentative)

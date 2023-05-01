@@ -30,8 +30,8 @@ urlpatterns = [
     path('club-rep-detail/<str:id>/', crud.clubDetailPage, name='clubDetailPage'),
     path('admin/', admin.site.urls),
     path('club_showings/', crud.club_showings),
+    path('customer_showings/', crud.customer_showings),
     path('delete-film-with-no-showings/<str:id>/', crud.deleteFilmWithNoShowings, name="deleteFilmWithNoShowings"),
-    path('club_account/', crud.club_account),
 
     # REST API
     path('api/v1/film', crud.create_film),

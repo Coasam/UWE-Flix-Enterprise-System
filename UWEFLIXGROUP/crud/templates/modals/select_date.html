@@ -9,6 +9,7 @@
 
         </div>		
 
+        {% if user.is_clubrepresentative %}
             <form method="post" class="font-weight-light" action="/club_showings/">
                 <h2 class="font-weight-bold mb-3 text-center">
                     Select Date
@@ -27,6 +28,26 @@
                     </div>
                     <button type="submit" class="btn btn-info mt-5 w-100 fw-bold">Select Date</button>
                 </div>
+            {% elif user.is_customer %}
+            <form method="post" class="font-weight-light" action="/customer_showings/">
+                <h2 class="font-weight-bold mb-3 text-center">
+                    Select Date
+                </h2>
+                {% csrf_token %}
+				{% if error %}
+				<div class="alert alert-danger" role="alert">
+					{{ error }}
+				</div>
+				{% endif %}
+
+                <div class="px-2 mb-4">
+                    <div class="form-group mt-4">
+                        <label for="date">Select Showing</label>
+                        <input type="date" class="form-control" id="date" name="showing_date">
+                    </div>
+                    <button type="submit" class="btn btn-info mt-5 w-100 fw-bold">Select Date</button>
+                </div>
+            {% endif %}
             
             </form>
         </div>
