@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('crud', '0001_alter_filmshowings_screen_delete_screen'),
+        ('crud', '0008_alter_filmshowings_screen_delete_screen'),
     ]
 
     operations = [

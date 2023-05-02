@@ -28,6 +28,11 @@ class CustomerForm(forms.Form):
     email = forms.EmailField()
     date_of_birth = forms.DateField()
 
+class CheckoutForm(forms.Form):
+    ticket_quantity = forms.IntegerField()
+    child_tickets = forms.IntegerField()
+    viewing = forms.IntegerField()
+
 class FilmForm(forms.Form):
     title = forms.CharField(max_length=100)
     rating = forms.ChoiceField(choices=[('U', 'U'), ('PG', 'PG'), ('12A', '12A'), ('15', '15'), ('18', '18')])

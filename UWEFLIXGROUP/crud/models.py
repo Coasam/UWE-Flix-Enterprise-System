@@ -73,11 +73,10 @@ class Viewing(models.Model):
    film_time = models.TimeField()
    ticket_quantity = models.IntegerField(default=150)
 
-class Tickets(models.Model):
-    ticketid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class Ticket(models.Model):
+    unique_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     is_child = models.BooleanField(default=False)
-    ticket_price = models.DecimalField(max_digits=5, decimal_places=2)
-    ticket_quantity = models.PositiveIntegerField()
-    film_title = models.CharField(max_length=100)
-    film_duration = models.IntegerField(default=0)
+    viewing = models.ForeignKey(Viewing, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
 

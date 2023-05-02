@@ -12,7 +12,7 @@
 						<span class="badge bg-primary rounded-pill">1</span>
 					</h4>
 					<ul class="list-group mb-3">
-						<li class="list-group-item d-flex justify-content-between lh-sm">
+						{% comment %} <li class="list-group-item d-flex justify-content-between lh-sm">
 							<div>
 								<h6 class="my-0">x1 Ticket - {{ viewing.film.title }}</h6>
 								<small class="text-body-secondary">Cinema Screen - {{ viewing.screen }}</small>
@@ -21,43 +21,64 @@
 							</div>
 							<span class="text-body-secondary">£12</span>
 						</li>
-
-						{% comment %} <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
+						<li class="list-group-item d-flex justify-content-between lh-sm">
+							<div>
+								<h6 class="my-0">x1 Child Ticket - {{ viewing.film.title }}</h6>
+								<small class="text-body-secondary">Cinema Screen - {{ viewing.screen }}</small>
+								<br>
+								<small class="text-body-secondary">Viewing Date - {{ viewing.film_date|date:"d/m/Y" }} {{ viewing.film_time|time:"H:i" }}</small>
+							</div>
+							<span class="text-body-secondary">£12</span>
+						</li> {% endcomment %}
+						
+						{% if user.is_clubrepresentative or user.is_cinemamanager %}
+						<li class="list-group-item d-flex justify-content-between bg-body-tertiary">
 							<div class="text-success">
 								<h6 class="my-0">Promo code</h6>
-								<small>EXAMPLECODE</small>
+								<small id="promo_code">CLUBREP10</small>
 							</div>
-							<span class="text-success">−$5</span>
-						</li> {% endcomment %}
+							<span class="text-success" id="discount">-£0</span>
+						</li>
+						{% endif %}
 						<li class="list-group-item d-flex justify-content-between">
 							<span>Total (GBP)</span>
-							<strong>£12</strong>
+							<strong id="total-price">£0</strong>
 						</li>
 					</ul>
-
-					<form class="card p-2">
-						<div class="input-group">
-							<input type="text" class="form-control" placeholder="Promo code">
-							<button type="submit" class="btn btn-secondary">Redeem</button>
-						</div>
-					</form>
 				</div>
 			</div>
 		</div>
 		<div class="col-md-7 col-lg-8">
 			<div class="card">
 				<div class="card-body">
-					<form class="needs-validation" novalidate="">
+					<form class="needs-validation" method="post">
+						{% csrf_token %}
+
+						<h4 class="mb-3">Order Information</h4>
+
+						<div class="row gy-3">
+							<div class="col-md-6">
+								<label for="ticket_quantity" class="form-label">Regular Tickets</label>
+								<input type="number" class="form-control" min="0" max="10" id="ticket_quantity" name="ticket_quantity" value="0" required>
+							</div>
+
+							<div class="col-md-6">
+								<label for="child_tickets" class="form-label">Child Tickets</label>
+								<input type="number" class="form-control" min="0" max="10" id="child_tickets" name="child_tickets" value="0" required>
+							</div>
+						</div>
+
+						<hr class="my-4">
 
 						<h4 class="mb-3">Payment</h4>
 
 						<div class="my-3">
 							<div class="form-check">
-								<input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked="" required="">
+								<input id="credit" type="radio" class="form-check-input" checked="" required>
 								<label class="form-check-label" for="credit">Credit card</label>
 							</div>
 							<div class="form-check">
-								<input id="debit" name="paymentMethod" type="radio" class="form-check-input" required="">
+								<input id="debit" type="radio" class="form-check-input" required="">
 								<label class="form-check-label" for="debit">Debit card</label>
 							</div>
 						</div>
@@ -65,7 +86,7 @@
 						<div class="row gy-3">
 							<div class="col-md-6">
 								<label for="cc-name" class="form-label">Name on card</label>
-								<input type="text" class="form-control" id="cc-name" placeholder="" required="">
+								<input type="text" class="form-control" id="cc-name" placeholder="John Doe" required>
 								<small class="text-body-secondary">Full name as displayed on card</small>
 								<div class="invalid-feedback">
 									Name on card is required
@@ -74,7 +95,8 @@
 
 							<div class="col-md-6">
 								<label for="cc-number" class="form-label">Card number</label>
-								<input type="text" class="form-control" id="cc-number" placeholder="" required="">
+								<input type="text" class="form-control" id="cc-number" placeholder="0000 0000 0000 0000" required minlength="16"
+								maxlength="16" />
 								<div class="invalid-feedback">
 									Credit card number is required
 								</div>
@@ -82,7 +104,8 @@
 
 							<div class="col-md-3">
 								<label for="cc-expiration" class="form-label">Expiration</label>
-								<input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
+								<input type="text" class="form-control" id="cc-expiration" placeholder="03/26" required minlength="5"
+								maxlength="5" />
 								<div class="invalid-feedback">
 									Expiration date required
 								</div>
@@ -90,7 +113,8 @@
 
 							<div class="col-md-3">
 								<label for="cc-cvv" class="form-label">CVV</label>
-								<input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+								<input type="text" class="form-control" id="cc-cvv" placeholder="000" required minlength="3"
+								maxlength="3" />
 								<div class="invalid-feedback">
 									Security code required
 								</div>
@@ -100,10 +124,52 @@
 						<hr class="my-4">
 
 						<button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+						<input hidden id="viewing-id" name="viewing" value="{{ viewing.id }}">
 					</form>
 			</div>
 		</div>
 		</div>
 	</div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+
+<script>
+	// Calculate price of regular tickets & child tickets, and update respective HTML elements
+	function calculatePrice() {
+		console.log("Calculating price")
+		var regularTicketPrice = 8;
+		var childTicketPrice = 5;
+
+		var regularTicketQuantity = document.getElementById("ticket_quantity").value;
+		var childTicketQuantity = document.getElementById("child_tickets").value;
+
+		var totalPrice = (regularTicketPrice * regularTicketQuantity) + (childTicketPrice * childTicketQuantity);
+
+		calculateDiscount(totalPrice);
+	}
+
+	// Calculate discount based on promo code, and update respective HTML elements
+	function calculateDiscount(totalPrice) {
+		var discountPercent = 0;
+
+		var promoCode = document.getElementById("promo_code").innerHTML;
+
+		if (promoCode == "CLUBREP10") {
+			discountPercent = 10;
+		}
+		
+		// Update HTML elements
+		document.getElementById("total-price").innerHTML = "£" + totalPrice;
+		document.getElementById("discount").innerHTML = "-" + "£" + (totalPrice * (discountPercent / 100)).toFixed(2);
+	}
+
+	// Update price when ticket quantity is changed
+	document.getElementById("ticket_quantity").addEventListener("change", calculatePrice);
+	document.getElementById("child_tickets").addEventListener("change", calculatePrice);
+
+	// Update discount code when 
+</script>
 {% endblock %}

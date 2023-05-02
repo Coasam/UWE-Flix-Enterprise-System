@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('crud', '0002_screen_viewing_delete_filmshowings'),
+        ('crud', '0009_screen_viewing_delete_filmshowings'),
     ]
 
     operations = [
