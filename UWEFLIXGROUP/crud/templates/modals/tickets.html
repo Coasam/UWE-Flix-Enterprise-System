@@ -18,10 +18,10 @@
           <input type="number" id = "childquantity" min = "1" max = "10" name="tickets.ticketquantity" class="form-control">
         </div>
 
-      <div class="form-group">
+      {% comment %} <div class="form-group">
           <label for="studentquantity">Student Tickets: {{ tickets.ticket_price }}</label>
           <input type="number" id = "studentquantity" min = "1" max = "10" name="tickets.ticketquantity" class="form-control">
-        </div>
+        </div> {% endcomment %}
 
       <div class="form-group">
           <label for="clubquantity">Club Tickets for Club Repersentatives only: {{ tickets.ticket_price }}</label>

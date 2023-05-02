@@ -13,10 +13,26 @@ A group project based off the UWE Flix case study to create a functional Enterpr
 
 ## Cinema Manager Login -->
 
-Email: test@gmail.com
-Password: my^Mg&K4^2Yu
+Email: manager@uweflix.net
+Password: manager
+
+### Description of how to use:
+
+1) Login as Cinema Manager, Create a Film.
+
+2) Once film is created, create a Viewing.
+
+3) Login As Customer and click purchase on a viewing.
+
+4) Enter details and checkout
 
 ## Account Manager Login -->
 
-Email: manager@uweflix.net
-Password: manager
+Email: admin@uweflix.net
+Password: admin
+
+### Description of how to use:
+
+1) Login as Account Manager
+
+2) View Accounts and Edit/Delete accounts

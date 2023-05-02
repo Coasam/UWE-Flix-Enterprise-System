@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('crud', 'create_cinema_manager'),
+        ('crud', '0007_create_cinema_manager'),
     ]
 
     operations = [

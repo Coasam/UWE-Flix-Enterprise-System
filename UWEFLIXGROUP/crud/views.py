@@ -8,8 +8,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from .models import User, Customer, Viewing, Film, Club
-from .forms import LoginForm, CustomerForm, ClubForm, ViewingForm, FilmForm
+from .models import User, Customer, Viewing, Film, Club, Ticket
+from .forms import LoginForm, CustomerForm, ClubForm, ViewingForm, FilmForm, CheckoutForm
 
 @login_required(login_url='/auth')
 def home(request):
@@ -273,12 +273,62 @@ def club_account(request):
 @user_passes_test(lambda user: user.is_accountmanager)
 def account_manager(request):
     users = User.objects.all()
+    
+    # Count users tickets
+    for user in users:
+        user.tickets = Ticket.objects.filter(user=user).count()
 
     return render(request, 'accounts.html', {'users': users})
 
-
+@login_required(login_url='/auth')
 def checkout(request):
-    viewing_id = request.GET.get('viewing')
-    viewing = Viewing.objects.get(id=viewing_id)
+    if request.method == 'POST':
 
-    return render(request, 'checkout.html', {'viewing': viewing})
+        form = CheckoutForm(request.POST)
+
+        if not form.is_valid():
+            return render(request, 'checkout.html', {'error': f'Invalid form data - {form.errors}'})
+
+        data = form.cleaned_data
+
+        viewing = Viewing.objects.get(id=data['viewing'])
+
+        # Now we create tickets for each quantity
+        for _ in range(data['ticket_quantity']):
+            customer = None
+
+            if request.user.is_customer:
+                customer = Customer.objects.get(user=request.user)
+
+            ticket = Ticket.objects.create(
+                viewing=viewing,
+                user=request.user,
+                customer=customer,
+                is_child=False
+            )
+
+            ticket.save()
+
+        for _ in range(data['child_tickets']):
+            customer = None
+
+            if request.user.is_customer:
+                customer = Customer.objects.get(user=request.user)
+
+            ticket = Ticket.objects.create(
+                viewing=viewing,
+                user=request.user,
+                customer=customer,
+                is_child=True
+            )
+
+            ticket.save()
+
+        return render(request, 'success.html', {'viewing': viewing})
+        
+
+    if request.method == 'GET':
+        viewing_id = request.GET.get('viewing')
+        viewing = Viewing.objects.get(id=viewing_id)
+
+        return render(request, 'checkout.html', {'viewing': viewing})

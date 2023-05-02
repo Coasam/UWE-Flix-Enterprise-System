@@ -2,31 +2,31 @@
 {% block content %}
 <div class="container mt-3 pt-5">
   <h2>Welcome, <strong>{{ user.get_username }}</strong></h2>
-
+  {% for user in users %}
   <div class="row mt-5">
     <div class="col-md-6">
-       
-      {% for user in users %}
         <table class="table">
           <thead>
             <tr>
-              <th scope="col"><h2>Username</h2></th>
-              <th scope="col"><h2>Tickets</h2></th>
-              <th scope="col"><h2>Total</h2></th>
+              <th scope="col"><h4>Username</h4></th>
+              <th scope="col"><h4>Tickets</h4></th>
+              <th scope="col"><h4>Total</h4></th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>{{ user }}</td>
-              <td>{{ Tickets }}</td>
-              <td>{{ ticket_price }}</td>
+              <td>{{ user.tickets }}</td>
+              <td></td>
+              <td> 
+                <button type="button" class="btn btn-primary">Edit</button>
+                <button type="button" class="btn btn-danger">Delete</button>
+              </td>
             </tr>
           </tbody>
         </table>
-        {% endfor %}
-    
       </div>
   </div>
-
+  {% endfor %}
 </div>
 {% endblock %}
