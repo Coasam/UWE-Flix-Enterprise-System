@@ -2,10 +2,16 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title fs-5" id="createViewingModalLabel">Create a Viewing</h2>
+        <h2 class="modal-title fs-5" id="createViewingModalLabel">Create Movie Viewing</h2>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        <!-- Error -->
+        <div class="alert alert-danger d-none" role="alert" id="createViewingError">
+          <ul id="createViewingErrorList">
+          </ul>
+        </div>
+
         <form>
           <div class="mb-3">
             <label for="movie" class="form-label">Movie</label>
@@ -38,12 +44,50 @@
             <input type="number" class="form-control" id="ticket-quantity" name="ticket_quantity">
           </div>
 
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="createViewingModal">Close</button>
-            <button type="submit" class="btn btn-primary">Create viewing</button>
-          </div>
-        </form>
-      </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Create Viewing</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
+
+{% block scripts %}
+<script>
+// Send API request to /api/v1/films
+$('#createViewingModal form').submit(function(e) {
+  e.preventDefault();
+
+  const formData = new FormData(this);
+
+  $.ajax({
+    url: '/api/v1/viewing',
+    type: 'POST',
+    data: formData,
+    success: function (data) {
+      // Close modal
+      $('#createViewingModal').modal('hide');
+    },
+    error: function (data) {
+      // Show error
+      $('#createViewingError').removeClass('d-none');
+
+      // Clear error list
+      $('#createViewingErrorList').empty();
+
+      // Loop through errors
+      $.each(data.responseJSON.error, function (key, value) {
+        // Append error to list
+        $('#createViewingErrorList').append('<li>' + value + '</li>');
+      });
+    },
+    cache: false,
+    contentType: false,
+    processData: false
+  });
+});
+
+</script>
+{% endblock %}

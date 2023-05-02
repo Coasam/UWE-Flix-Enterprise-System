@@ -13,11 +13,11 @@ class LoginForm(forms.Form):
     password = forms.CharField(max_length=100)
 
 # Screen Booking/Showing Form - Customer
-class ShowingForm(forms.Form):
+class ViewingForm(forms.Form):
     film = forms.IntegerField()
     screen = forms.IntegerField()
-    film_date = forms.DateInput()
-    film_time = forms.TimeInput()
+    film_date = forms.DateField()
+    film_time = forms.TimeField()
     ticket_quantity = forms.IntegerField()
 
 class CustomerForm(forms.Form):

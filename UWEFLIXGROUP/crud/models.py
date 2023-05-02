@@ -66,14 +66,16 @@ class Film(models.Model):
 class Screen(models.Model):
    capacity = models.IntegerField(default=0)
 
-class FilmShowings(models.Model):
-   movie = models.ForeignKey(Film, default=1, on_delete=models.CASCADE)
+class Viewing(models.Model):
+   film = models.ForeignKey(Film, default=1, on_delete=models.CASCADE)
    screen = models.IntegerField(default=1)
    film_date = models.DateField()
+   film_time = models.TimeField()
    ticket_quantity = models.IntegerField(default=150)
 
 class Tickets(models.Model):
     ticketid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    is_child = models.BooleanField(default=False)
     ticket_price = models.DecimalField(max_digits=5, decimal_places=2)
     ticket_quantity = models.PositiveIntegerField()
     film_title = models.CharField(max_length=100)

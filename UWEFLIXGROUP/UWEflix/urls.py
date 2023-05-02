@@ -30,11 +30,13 @@ urlpatterns = [
     path('club-rep-detail/<str:id>/', crud.clubDetailPage, name='clubDetailPage'),
     path('admin/', admin.site.urls),
     path('showings/', crud.showings),
-    path('delete-film-with-no-showings/<str:id>/', crud.deleteFilmWithNoShowings, name="deleteFilmWithNoShowings"),
+    # path('delete-film-with-no -showings/<str:id>/', crud.deleteFilmWithNoShowings, name="deleteFilmWithNoShowings"),
     path('club_account/', crud.club_account),
     path('accounts', crud.account_manager),
+    path('checkout', crud.checkout, name='checkout'),
     # REST API
     path('api/v1/film', crud.create_film),
+    path('api/v1/viewing', crud.create_viewing),
 
     # Images
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
