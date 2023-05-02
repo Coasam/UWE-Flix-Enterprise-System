@@ -4,34 +4,21 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from django.http.response import HttpResponseRedirect, JsonResponse
 from django.core.exceptions import PermissionDenied
+import logging
 
+logger = logging.getLogger(__name__)
 
-from .models import User, Customer, FilmShowings, Film, Club
-from .forms import LoginForm, CustomerForm, FilmForm, ClubForm
+from .models import User, Customer, Viewing, Film, Club
+from .forms import LoginForm, CustomerForm, ClubForm, ViewingForm, FilmForm
 
 @login_required(login_url='/auth')
 def home(request):
     # Load films
     total_films = []
-    showings = Film.objects.all()
-    # for filmShowing in showings:
-    #     print("\n film :", filmShowing)
-    #     filmShowingObj = FilmShowings.objects.filter(movie = filmShowing)
-    #     for showing in filmShowingObj:
-    #         total_films.append({
-    #         'id':filmShowing.id,
-    #         'title': filmShowing.title,
-    #         'rating': filmShowing.rating,
-    #         'duration': filmShowing.duration,
-    #         'description': filmShowing.description,
-    #         'image': filmShowing.image,
-    #         'trailer' : filmShowing.trailer,
-    #         'movie': showing.movie
-    #     })
-    # print("\n Total films :", total_films)
+    films = Film.objects.all()
+    viewings = Viewing.objects.all()
 
-
-    return render(request, 'home.html', {'films': showings})
+    return render(request, 'home.html', {'films':  films, 'viewings': viewings})
 
 @login_required(login_url='/auth')
 def filmDetailPage(request, id):
@@ -239,33 +226,29 @@ def create_viewing(request):
         raise PermissionDenied
 
     # Get the form
-    form = FilmForm(request.POST, request.FILES)
+    form = ViewingForm(request.POST)
 
     # Check if the form is valid
     if not form.is_valid():
         return JsonResponse({'error': form.errors}, status=400)
-        return JsonResponse({'error': form.errors})
-
 
     # Get the form data
     data = form.cleaned_data
 
-    # Remove the /uploads/ from the image path
-    data['image'] = data['image'].replace('/uploads/', '')
+    film = Film.objects.get(id=data['film'])
     
     # Create the film
-    film = Film.objects.create(
-        title=data['title'],
-        description=data['description'],
-        duration=data['duration'],
-        rating=data['rating'],
-        image=data['image'],
-        trailer=data['trailer']
+    viewing = Viewing.objects.create(
+        film=film,
+        film_date=data['film_date'],
+        film_time=data['film_time'],
+        screen=data['screen'],
+        ticket_quantity=data['ticket_quantity']
     )
 
-    film.save()
+    viewing.save()
 
-    return JsonResponse({'success': 'Film created successfully'})
+    return JsonResponse({'success': 'Viewing created successfully'})
 
 # Logout View - Samuel
 def logout(request):
@@ -287,19 +270,15 @@ def club_account(request):
     return render(request, 'club_account.html')
 
 @login_required(login_url='/auth')
-@user_passes_test(lambda user: user.is_clubrepresentative)
-def deleteFilmWithNoShowings(request, id):
-    showing = get_object_or_404(FilmShowings, id=id)
-    film = showing.movie
-    showing.delete()
-    if not film.filmshowings_set.all().exists():
-        film.delete()
-    return redirect('home')
-
-@login_required(login_url='/auth')
 @user_passes_test(lambda user: user.is_accountmanager)
 def account_manager(request):
     users = User.objects.all()
 
     return render(request, 'accounts.html', {'users': users})
 
+
+def checkout(request):
+    viewing_id = request.GET.get('viewing')
+    viewing = Viewing.objects.get(id=viewing_id)
+
+    return render(request, 'checkout.html', {'viewing': viewing})
