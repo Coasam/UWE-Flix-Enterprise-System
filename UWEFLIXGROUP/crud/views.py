@@ -9,7 +9,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from .models import User, Customer, Viewing, Film, Club, Ticket
-from .forms import LoginForm, CustomerForm, ClubForm, ViewingForm, FilmForm, CheckoutForm
+from .forms import LoginForm, CustomerForm, ClubForm, ViewingForm, FilmForm, CheckoutForm, DateForm
 
 @login_required(login_url='/auth')
 def home(request):
@@ -260,10 +260,30 @@ def logout(request):
     return HttpResponseRedirect('/auth')
 
 # Booking system
-def showings(request):
+def club_showings(request):
+    club_ticket_min = 10
+    if request.method == 'POST':
+        selected_date = request.POST.get('showing_date', None)
+        try:
+            showings = Viewing.objects.filter(film_date = selected_date)
+            avail_showings=showings.filter(ticket_quantity__gte=club_ticket_min)
+            context = {'selected_date': selected_date, 'showings': avail_showings}
+            return render(request, 'showings.html', context)
+        except Viewing.DoesNotExist:
+                context = {'selected_date': selected_date}
+                return render(request, 'showings.html', context)
+
+def customer_showings(request):
     #function to only show certain dates
-    #showings = Film.objects.filter(film_date = selected_date)
-    return render(request, 'screenings.html')
+    if request.method == 'POST':
+        selected_date = request.POST.get('showing_date', None)
+        try:
+            showings = Viewing.objects.get(film_date = selected_date)
+            context = {'selected_date': selected_date, 'showings': showings}
+            return render(request, 'howings.html', context)
+        except Viewing.DoesNotExist:
+                context = {'selected_date': selected_date}
+                return render(request, 'showings.html', context)
 
 #Club Rep
 def club_account(request):
