@@ -267,23 +267,23 @@ def club_showings(request):
         try:
             showings = Viewing.objects.filter(film_date = selected_date)
             avail_showings=showings.filter(ticket_quantity__gte=club_ticket_min)
-            context = {'selected_date': selected_date, 'showings': avail_showings}
-            return render(request, 'showings.html', context)
+            context = {'selected_date': selected_date, 'viewings': avail_showings}
+            return render(request, 'viewings.html', context)
         except Viewing.DoesNotExist:
                 context = {'selected_date': selected_date}
-                return render(request, 'showings.html', context)
+                return render(request, 'viewings.html', context)
 
 def customer_showings(request):
     #function to only show certain dates
     if request.method == 'POST':
         selected_date = request.POST.get('showing_date', None)
         try:
-            showings = Viewing.objects.get(film_date = selected_date)
-            context = {'selected_date': selected_date, 'showings': showings}
-            return render(request, 'howings.html', context)
+            showings = Viewing.objects.filter(film_date = selected_date)
+            context = {'selected_date': selected_date, 'viewings': showings}
+            return render(request, 'viewings.html', context)
         except Viewing.DoesNotExist:
                 context = {'selected_date': selected_date}
-                return render(request, 'showings.html', context)
+                return render(request, 'viewings.html', context)
 
 #Club Rep
 def club_account(request):
