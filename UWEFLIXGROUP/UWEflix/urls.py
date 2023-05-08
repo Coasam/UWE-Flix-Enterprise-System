@@ -37,6 +37,8 @@ urlpatterns = [
     path('club_account/', crud.club_account),
     path('accounts', crud.account_manager),
     path('checkout', crud.checkout, name='checkout'),
+    path('club_showings/', crud.club_showings),
+    path('customer_showings/', crud.customer_showings),
 
     # Tickets
     path('tickets', crud.view_tickets, { 'user_id': None }, name='tickets'),
@@ -44,7 +46,7 @@ urlpatterns = [
     path('tickets/cancel/<str:id>', crud.cancel_ticket, name='cancel_ticket'),
 
     # Viewings
-    path('/viewings/delete/<str:id>', crud.delete_viewing, name='viewings'),
+    path('viewings/delete/<str:id>', crud.delete_viewing, name='viewings'),
 
     # REST API
     path('api/v1/film', crud.create_film),
