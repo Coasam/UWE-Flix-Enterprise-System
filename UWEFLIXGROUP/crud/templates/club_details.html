@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-3 pt-5">
+  <h2>Welcome, <strong>{{ user.get_username }}</strong></h2>
+
+  <div class="card my-5">
+    <div class="card-header">
+      <h3>Club Representative Details</h3>
+    </div>
+    <div class="card-body">
+      <h4>{{ club_obj.name }}</h4>
+      <p><strong>Address:</strong> {{ club_obj.street_num }} {{ club_obj.street }}</p>
+      <p><strong>Post Code:</strong> {{ club_obj.city }}, {{ club_obj.postcode }}</p>
+      <p><strong>Landline:</strong> {{ club_obj.landline_no }}</p>
+      <p><strong>Contact Mobile:</strong> {{ club_obj.mobile_no }}</p>
+    </div>
+    <div class="card-footer">
+      <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

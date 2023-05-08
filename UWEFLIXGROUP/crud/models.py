@@ -10,14 +10,8 @@ class User(AbstractUser):
     is_clubrepresentative = models.BooleanField(default=False)
     email = models.EmailField()
 
-class Representative(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    first_name = models.CharField(max_length=20)
-    last_name = models.CharField(max_length=20)
-    date_of_birth = models.DateField()
-
 class Club(models.Model):
-    # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=50)
     street = models.CharField(max_length = 50)
     street_num = models.IntegerField()
@@ -26,31 +20,15 @@ class Club(models.Model):
     landline_no = models.CharField(max_length=15)
     mobile_no = models.CharField(max_length=15)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
-    representative = models.ForeignKey(Representative, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
 
-class CinemaManager(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    first_name = models.CharField(max_length=20)
-    last_name = models.CharField(max_length=20)
-
-class AccountManager(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    first_name = models.CharField(max_length=20)
-    last_name = models.CharField(max_length=20)
-
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     title = models.CharField(max_length=4)
-    # first_name = models.CharField(max_length=100)
-    # last_name = models.CharField(max_length=100)
-    date_of_birth = models.DateField()
-    club = models.ForeignKey(Club, on_delete=models.CASCADE, null=True, blank=True)
     cc_number = models.CharField(max_length=30, null=True, blank=True)
     cc_exp = models.CharField(max_length=6, null=True, blank=True)
-    discount = models.FloatField(default=0.00)
 
     def __str__(self):
         return self.name
@@ -72,6 +50,7 @@ class Viewing(models.Model):
    film_date = models.DateField()
    film_time = models.TimeField()
    ticket_quantity = models.IntegerField(default=150)
+   
 
 class Ticket(models.Model):
     unique_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

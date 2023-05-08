@@ -6,7 +6,44 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            ...
+            <form>
+              <div class="mb-3">
+                <label for="movie" class="form-label">Movie</label>
+                <select name="film" class="form-select" aria-label="Default select example">
+                  <option selected>Open this select menu</option>
+                  {% for film in films %}
+                  <option value="{{ film.id }}">{{ film.title }}</option>
+                  {% endfor %}              
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="screen" class="form-label">Screen</label>
+                <select name="screen" class="form-select" aria-label="Default select example">
+                  <option selected>Open this select menu</option>
+                  <option value="1">Screen 1 (100 Seats)</option>
+                  <option value="2">Screen 2 (100 Seats)</option>
+                  <option value="3">Screen 3 (100 Seats)</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="film-date" class="form-label">Film Date</label>
+                <input type="date" class="form-control" id="film-date" name="film_date">
+              </div>
+              <div class="mb-3">
+                <label for="film-time" class="form-label">Film Time</label>
+                <input type="time" class="form-control" id="film-time" name="film_time">
+              </div>
+              <div class="mb-3">
+                <label for="ticket-quantity" class="form-label">Ticket Quantity</label>
+                <input type="number" class="form-control" id="ticket-quantity" name="ticket_quantity">
+              </div>
+    
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Create Viewing</button>
+            </div>
+          </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

@@ -1,0 +1,45 @@
+<div class="modal fade" id="createViewingModal" tabindex="-1" aria-labelledby="createViewingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="editAccountModalLabel">Edit Account</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Error -->
+          <div class="alert alert-danger d-none" role="alert" id="createViewingError">
+            <ul id="createViewingErrorList">
+            </ul>
+          </div>
+          <form>
+            <div class="mb-3">
+              <label for="film-date" class="form-label">First Name</label>
+              <input type="date" class="form-control" id="customer-firstname" name="customer_date">
+            </div>
+            <div class="mb-3">
+              <label for="film-time" class="form-label">Last Name</label>
+              <input type="time" class="form-control" id="film-time" name="film_time">
+            </div>
+            <div class="mb-3">
+              <label for="ticket-quantity" class="form-label">Email</label>
+              <input type="number" class="form-control" id="ticket-quantity" name="ticket_quantity">
+            </div>
+            <div class="mb-3">
+                <label for="ticket-quantity" class="form-label">Date Of Birth</label>
+                <input type="number" class="form-control" id="ticket-quantity" name="ticket_quantity">
+              </div>
+  
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Edit Account</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  {% block scripts %}
+  <script>
+  </script>
+  {% endblock %}
