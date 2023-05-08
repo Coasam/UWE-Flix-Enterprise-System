@@ -4,7 +4,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from django.http.response import HttpResponseRedirect, JsonResponse
 from django.core.exceptions import PermissionDenied
-import logging
+import logging, datetime#
+
+from django.db.models import Count
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +20,16 @@ def home(request):
     films = Film.objects.all()
     viewings = Viewing.objects.all()
 
-    return render(request, 'home.html', {'films':  films, 'viewings': viewings})
+    for viewing in viewings:
+        total_tickets = Ticket.objects.filter(viewing=viewing).count()
+        viewing.tickets_left = viewing.ticket_quantity - total_tickets
+    
+    users = []
+
+    if request.user and request.user.is_cinemamanager:
+        users = User.objects.filter(is_customer=True)
+
+    return render(request, 'home.html', {'films':  films, 'viewings': viewings, 'users': users})
 
 @login_required(login_url='/auth')
 def filmDetailPage(request, id):
@@ -28,7 +39,7 @@ def filmDetailPage(request, id):
         film_obj = None
     context = {
         'film_obj': film_obj
-        }
+    }
 
     return render(request, 'film_detail_page.html', context)
 
@@ -185,7 +196,7 @@ def clubDetailPage(request, id):
         'club_obj': club_obj
         }
 
-    return render(request, 'modals/club_details.html', context)
+    return render(request, 'club_details.html', context)
 
 @login_required(login_url='/auth')
 @user_passes_test(lambda user: user.is_cinemamanager)
@@ -250,6 +261,43 @@ def create_viewing(request):
 
     return JsonResponse({'success': 'Viewing created successfully'})
 
+@login_required(login_url='/auth')
+@user_passes_test(lambda user: user.is_cinemamanager)
+@csrf_exempt
+def create_club(request):
+    if request.method != 'POST':
+        raise PermissionDenied
+
+    # Get the form
+    form = ClubForm(request.POST)
+
+    # Check if the form is valid
+    if not form.is_valid():
+        return JsonResponse({'error': form.errors}, status=400)
+
+    # Get the form data
+    data = form.cleaned_data
+
+    user = User.objects.get(id=data['user'])
+
+    # Make user a clubrepresentative
+    user.is_clubrepresentative = True
+    user.save()
+
+    # Create the club
+    Club.objects.create(
+        name=data['name'],
+        street=data['street'],
+        street_num=data['street_num'],
+        city=data['city'],
+        postcode=data['postcode'],
+        landline_no=data['landline_no'],
+        mobile_no=data['mobile_no'],
+        user=user
+    )
+
+    return JsonResponse({'success': 'Viewing created successfully'})
+
 # Logout View - Samuel
 def logout(request):
     # Check if the user is authenticated if so, log them out
@@ -293,7 +341,7 @@ def club_account(request):
 @user_passes_test(lambda user: user.is_accountmanager)
 def account_manager(request):
     users = User.objects.all()
-    
+
     # Count users tickets
     for user in users:
         user.tickets = Ticket.objects.filter(user=user).count()
@@ -312,6 +360,12 @@ def checkout(request):
         data = form.cleaned_data
 
         viewing = Viewing.objects.get(id=data['viewing'])
+
+        viewing_ticket_count = Ticket.objects.filter(viewing=viewing).count()
+        tickets_left = viewing.ticket_quantity - viewing_ticket_count
+
+        if tickets_left < data['ticket_quantity'] + data['child_tickets']:
+            return render(request, 'checkout.html', {'error': f'Not enough tickets left for this viewing'})
 
         # Now we create tickets for each quantity
         for _ in range(data['ticket_quantity']):
@@ -352,3 +406,70 @@ def checkout(request):
         viewing = Viewing.objects.get(id=viewing_id)
 
         return render(request, 'checkout.html', {'viewing': viewing})
+
+@login_required(login_url='/auth')    
+def view_tickets(request, user_id):  
+    tickets = []
+
+    user = request.user
+
+    # If we want to fetch a specific users tickets, provide the user_id :)
+    if user_id is not None:
+        user = User.objects.get(id=user_id)
+
+    # First we want to search all tickets :)
+    for ticket in Ticket.objects.filter(user=user).order_by('viewing'):
+        if len(tickets) > 0: # Sanity check
+            if tickets[-1]['viewing'] == ticket.viewing: # If the last viewing is the same as the current ticket
+                tickets[-1]['tickets'].append(ticket) # Add the ticket to the last viewing
+                continue # Skip the rest of the loop
+
+        tickets.append({
+            'viewing': ticket.viewing,
+            'tickets': [ticket]
+        })
+
+    return render(request, 'view_tickets.html', {'tickets': tickets, 'customer': user})
+
+
+@login_required(login_url='/auth')
+def cancel_ticket(request, id):
+    ticket = Ticket.objects.get(unique_id=id)
+
+    if ticket.user != request.user and not request.user.is_accountmanager:
+        raise PermissionDenied
+
+    ticket.delete()
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+# @login_required(login_url='/auth')
+# def edit_user(request, id):
+#     user = User.objects.get(id=id)
+
+#     if request.method == 'POST':
+#         form = EditUserForm(request.POST)
+
+#         if not form.is_valid():
+#             return render(request, 'edit_user.html', {'error': f'Invalid form data - {form.errors}', 'user': user})
+
+#         data = form.cleaned_data
+
+#         user.first_name = data['first_name']
+#         user.last_name = data['last_name']
+#         user.email = data['email']
+
+#         user.save()
+
+#         return HttpResponseRedirect('/accounts')
+
+#     return render(request, 'edit_user.html', {'user': user})
+
+@login_required(login_url='/auth')
+@user_passes_test(lambda user: user.is_cinemamanager)
+def delete_viewing(request, id):
+    viewing = Viewing.objects.get(id=id)
+
+    viewing.delete()
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

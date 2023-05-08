@@ -1,0 +1,42 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+<div class="container mt-3 pt-5">
+  {% if 'user_id' in request.GET %}
+  <h2>{{ customer.first_name }} {{ customer.last_name }}'s Tickets</h2>
+  {% else %}
+  <h2>Your Tickets</h2>
+  {% endif %}
+
+  <div class="d-flex flex-column">
+    {% for data in tickets %}
+    <div>
+      <h4 class="mt-3">Tickets for {{ data.viewing.film.title }}</h4>
+      <div class="d-flex flex-row flex-wrap gap-3">
+        {% for ticket in data.tickets %}
+          <div class="card" style="width: 18rem">
+            <div class="card-body">
+              <h5 class="card-title">
+                1x
+                {% if ticket.is_child %}
+                Child Ticket
+                {% else %}
+                Standard Ticket
+                {% endif %}
+              </h5>
+              <p class="card-text">
+                <!-- Ticket information, date of film, time -->
+                <strong>Viewing Date</strong><br>
+                {{ data.viewing.film_date|date:"l d F Y" }}<br>
+                {{ data.viewing.film_time|time:"H:i" }}
+              </p>
+              <a href="/tickets/cancel/{{ticket.unique_id}}" class="btn btn-danger">Cancel Ticket</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

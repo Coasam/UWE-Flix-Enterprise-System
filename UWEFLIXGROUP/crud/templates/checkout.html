@@ -54,6 +54,13 @@
 					<form class="needs-validation" method="post">
 						{% csrf_token %}
 
+						<!-- error -->
+						{% if error %}
+						<div class="alert alert-danger" role="alert">
+							{{ error }}
+						</div>
+						{% endif %}
+
 						<h4 class="mb-3">Order Information</h4>
 
 						<div class="row gy-3">
@@ -155,15 +162,22 @@
 	function calculateDiscount(totalPrice) {
 		var discountPercent = 0;
 
-		var promoCode = document.getElementById("promo_code").innerHTML;
+		var promoCode = document.getElementById("promo_code");
 
-		if (promoCode == "CLUBREP10") {
+		if (promoCode && promoCode.innerHTML == "CLUBREP10") {
 			discountPercent = 10;
 		}
 		
 		// Update HTML elements
-		document.getElementById("total-price").innerHTML = "£" + totalPrice;
-		document.getElementById("discount").innerHTML = "-" + "£" + (totalPrice * (discountPercent / 100)).toFixed(2);
+		const total_price = document.getElementById("total-price")
+		total_price.innerHTML = "£" + totalPrice.toFixed(2);
+
+		const discount = document.getElementById("discount")
+		
+		if (discount) {
+			discount.innerHTML = "-" + "£" + (totalPrice * (discountPercent / 100)).toFixed(2);
+			total_price.innerHTML = "£" + (totalPrice * (1 - (discountPercent / 100))).toFixed(2);
+		}
 	}
 
 	// Update price when ticket quantity is changed

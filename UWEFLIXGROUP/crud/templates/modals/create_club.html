@@ -1,0 +1,131 @@
+<div
+  class="modal fade"
+  id="addClubModal"
+  tabindex="-1"
+  aria-labelledby="addClubModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title fs-5" id="addClubModalLabel">
+          Create Club
+        </h2>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <!-- Error -->
+        <div
+          class="alert alert-danger d-none"
+          role="alert"
+          id="createClubError"
+        >
+          <ul id="createClubErrorList"></ul>
+        </div>
+
+        <form method="">
+          <div class="mb-3">
+            <label for="clubName" class="form-label">Club Name</label>
+            <input type="text" class="form-control" id="clubName" name="name" required />
+          </div>
+          <div class="mb-3">
+            <label for="streetNumber" class="form-label">Street Number</label>
+            <input
+              type="text"
+              class="form-control"
+              id="streetNumber"
+              required
+              name="street_num"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="street" class="form-label">Street</label>
+            <input type="text" class="form-control" id="street" name="street" required />
+          </div>
+          <div class="mb-3">
+            <label for="city" class="form-label">City</label>
+            <input type="text" class="form-control" id="city" name="city" required />
+          </div>
+          <div class="mb-3">
+            <label for="postcode" class="form-label">Postcode</label>
+            <input type="text" class="form-control" id="postcode" name="postcode" required />
+          </div>
+          <div class="mb-3">
+            <label for="landline" class="form-label"
+              >Landline Telephone Number</label
+            >
+            <input type="tel" class="form-control" id="landline" name="landline_no" />
+          </div>
+          <div class="mb-3">
+            <label for="mobile" class="form-label"
+              >Mobile Telephone Number</label
+            >
+            <input type="tel" class="form-control" id="mobile" name="mobile_no" required />
+          </div>
+          <div class="mb-3">
+            <label for="user" class="form-label">User</label>
+            <select name="user" class="form-select" aria-label="Default select example">
+              <option selected>Open this select menu</option>
+              {% for user in users %}
+              <option value="{{ user.id }}">{{ user.email }}</option>
+              {% endfor %}              
+            </select>
+          </div>
+          
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="submit" class="btn btn-primary">Create Club</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% block scripts %}
+  <script>
+    $("#addClubModal form").submit(function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+
+      $.ajax({
+        url: "/api/v1/club",
+        type: "POST",
+        data: formData,
+        success: function (data) {
+          // Close modal
+          $("#addClubModal").modal("hide");
+        },
+        error: function (data) {
+          // Show error
+          $("#createClubError").removeClass("d-none");
+
+          // Clear error list
+          $("#createClubErrorList").empty();
+
+          // Loop through errors
+          $.each(data.responseJSON.error, function (key, value) {
+            // Append error to list
+            $("#createClubErrorList").append("<li>" + value + "</li>");
+          });
+        },
+        cache: false,
+        contentType: false,
+        processData: false,
+      });
+    });
+  </script>
+  {% endblock %}
+</div>

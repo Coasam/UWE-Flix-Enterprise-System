@@ -5,15 +5,16 @@
 
   <div class="row mt-5">
     <div class="col-md-6">
-      <img src="{{ film_obj.image.url }}" alt="" class="img-fluid">
+      <img src="{{ film_obj.image.url }}" alt="" class="img-fluid border border-dark">
     </div>
     <div class="col-md-6">
       <div class="card">
         <div class="card-body px-4">
-          <h1>{{ film_obj.title }}</h1>
+          <h1><strong>{{ film_obj.title }}</strong></h1>
           <p>{{ film_obj.description }}</p>
           <p>Duration: {{ film_obj.duration }} minutes</p>
           <p>Rating: {{ film_obj.get_rating_display }}</p>
+          <p> Adult Ticket: <strong>£8</strong> Child Ticket: <strong>£5</strong> </p>
           <a href="{% url 'home' %}" class="btn btn-primary">Back to list</a>
         </div>
       </div>

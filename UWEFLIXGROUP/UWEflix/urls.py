@@ -20,25 +20,36 @@ from django.conf.urls.static import static
 from crud import views as crud
 
 urlpatterns = [
+    # Authentication
     path('auth', crud.login),
     path('auth/rep', crud.representative_login),
     path('auth/register', crud.register_customer),
     path('auth/club/register/', crud.register_club, name="register_club"),
     path('logout', crud.logout),
+
+    # Admin
+    path('admin/', admin.site.urls),
+
     path('', crud.home, name='home'),
     path('film-detail/<str:id>/', crud.filmDetailPage, name='filmDetailPage'),
     path('club-rep-detail/<str:id>/', crud.clubDetailPage, name='clubDetailPage'),
-    path('admin/', admin.site.urls),
-    #path('showings/', crud.showings),
     # path('delete-film-with-no -showings/<str:id>/', crud.deleteFilmWithNoShowings, name="deleteFilmWithNoShowings"),
     path('club_account/', crud.club_account),
     path('accounts', crud.account_manager),
     path('checkout', crud.checkout, name='checkout'),
-    path('club_showings/', crud.club_showings),
-    path('customer_showings/', crud.customer_showings),
+
+    # Tickets
+    path('tickets', crud.view_tickets, { 'user_id': None }, name='tickets'),
+    path('tickets/<str:user_id>', crud.view_tickets, name='tickets_user'),
+    path('tickets/cancel/<str:id>', crud.cancel_ticket, name='cancel_ticket'),
+
+    # Viewings
+    path('/viewings/delete/<str:id>', crud.delete_viewing, name='viewings'),
+
     # REST API
     path('api/v1/film', crud.create_film),
     path('api/v1/viewing', crud.create_viewing),
+    path('api/v1/club', crud.create_club),
 
     # Images
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
