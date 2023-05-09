@@ -77,6 +77,9 @@ $('#createFilmModal form').submit(function(e) {
     success: function (data) {
       // Close modal
       $('#createFilmModal').modal('hide');
+
+      // Refresh page
+      location.reload();
     },
     error: function (data) {
       // Show error

@@ -109,15 +109,15 @@ def register_customer(request):
             is_customer=True
         )
 
-        user.set_password(data['password'])
-        user.save()
-
         # Create Customer
         customer = Customer.objects.create(
             user=user,
             title=data['title'],
-            date_of_birth=data['date_of_birth'],
+            #date_of_birth=data['date_of_birth'],
         )
+
+        user.set_password(data['password'])
+        user.save()
 
         customer.save()
 
@@ -359,6 +359,10 @@ def checkout(request):
 
         data = form.cleaned_data
 
+        # Check if club rep and buying less than 10, then return error
+        if request.user.is_clubrepresentative and data['ticket_quantity'] + data['child_tickets'] < 10:
+            return render(request, 'checkout.html', {'error': f'Club representatives must buy at least 10 tickets or more'})
+
         viewing = Viewing.objects.get(id=data['viewing'])
 
         viewing_ticket_count = Ticket.objects.filter(viewing=viewing).count()
@@ -372,7 +376,11 @@ def checkout(request):
             customer = None
 
             if request.user.is_customer:
-                customer = Customer.objects.get(user=request.user)
+                try:
+                    customer = Customer.objects.get(user=request.user)
+                except Customer.DoesNotExist:
+                    customer = Customer.objects.create(user=request.user, first_name=request.user.first_name, last_name=request.user.last_name, email=request.user.email)
+                    customer.save()
 
             ticket = Ticket.objects.create(
                 viewing=viewing,
@@ -387,7 +395,11 @@ def checkout(request):
             customer = None
 
             if request.user.is_customer:
-                customer = Customer.objects.get(user=request.user)
+                try:
+                    customer = Customer.objects.get(user=request.user)
+                except Customer.DoesNotExist:
+                    customer = Customer.objects.create(user=request.user, first_name=request.user.first_name, last_name=request.user.last_name, email=request.user.email)
+                    customer.save()
 
             ticket = Ticket.objects.create(
                 viewing=viewing,

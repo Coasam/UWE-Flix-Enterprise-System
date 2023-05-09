@@ -69,6 +69,8 @@ $('#createViewingModal form').submit(function(e) {
     success: function (data) {
       // Close modal
       $('#createViewingModal').modal('hide');
+
+      location.reload();
     },
     error: function (data) {
       // Show error
