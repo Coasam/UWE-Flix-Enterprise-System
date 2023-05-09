@@ -11,7 +11,7 @@ from django.db.models import Count
 logger = logging.getLogger(__name__)
 
 from .models import User, Customer, Viewing, Film, Club, Ticket
-from .forms import LoginForm, CustomerForm, ClubForm, ViewingForm, FilmForm, CheckoutForm, DateForm
+from .forms import LoginForm, CustomerForm, ClubForm, ViewingForm, FilmForm, CheckoutForm, DateForm, EditUserForm
 
 @login_required(login_url='/auth')
 def home(request):
@@ -455,27 +455,29 @@ def cancel_ticket(request, id):
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
-# @login_required(login_url='/auth')
-# def edit_user(request, id):
-#     user = User.objects.get(id=id)
+@login_required(login_url='/auth')
+@user_passes_test(lambda user: user.is_accountmanager)
+def edit_user(request, id):
+    if request.method == 'POST':
+        form = EditUserForm(request.POST)
 
-#     if request.method == 'POST':
-#         form = EditUserForm(request.POST)
+        if not form.is_valid():
+            return render(request, 'edit_user.html', {'error': f'Invalid form data - {form.errors}'})
 
-#         if not form.is_valid():
-#             return render(request, 'edit_user.html', {'error': f'Invalid form data - {form.errors}', 'user': user})
+        data = form.cleaned_data
 
-#         data = form.cleaned_data
+        user = User.objects.get(id=id)
 
-#         user.first_name = data['first_name']
-#         user.last_name = data['last_name']
-#         user.email = data['email']
+        user.first_name = data['first_name']
+        user.last_name = data['last_name']
+        user.email = data['email']
 
-#         user.save()
+        user.save()
 
-#         return HttpResponseRedirect('/accounts')
+        return HttpResponseRedirect('/accounts')
+    
+    return render(request, 'edit_user.html', {'user': User.objects.get(id=id)})
 
-#     return render(request, 'edit_user.html', {'user': user})
 
 @login_required(login_url='/auth')
 @user_passes_test(lambda user: user.is_cinemamanager)
@@ -485,3 +487,4 @@ def delete_viewing(request, id):
     viewing.delete()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+

@@ -7,7 +7,7 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col"><h4>Username</h4></th>
+            <th scope="col"><h4>E-Mail</h4></th>
             <th scope="col"><h4>Tickets</h4></th>
             <th scope="col"><h4>Total</h4></th>
           </tr>
@@ -15,12 +15,12 @@
         <tbody>
             {% for user in users %}
             <tr>
-              <td>{{ user }}</td>
+              <td>{{ user.email }}</td>
               <td>{{ user.tickets }}</td>
               <td></td>
               <td> 
                 <a href="/tickets/{{user.id}}" class="btn btn-sm btn-success">Tickets</a>
-                <button type="button" class="btn btn-sm btn-primary">Edit</button>
+                <a href="/accounts/edit/{{user.id}}" type="button" class="btn btn-sm btn-primary">Edit</a>
                 <button type="button" class="btn btn-sm btn-danger ms-1">Delete</button>
               </td>
             </tr>

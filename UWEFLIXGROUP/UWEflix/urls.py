@@ -36,6 +36,7 @@ urlpatterns = [
     # path('delete-film-with-no -showings/<str:id>/', crud.deleteFilmWithNoShowings, name="deleteFilmWithNoShowings"),
     path('club_account/', crud.club_account),
     path('accounts', crud.account_manager),
+    path('accounts/edit/<str:id>', crud.edit_user, name='edit_user'),
     path('checkout', crud.checkout, name='checkout'),
     path('club_showings/', crud.club_showings),
     path('customer_showings/', crud.customer_showings),

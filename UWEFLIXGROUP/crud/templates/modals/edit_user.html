@@ -1,0 +1,79 @@
+<div class="modal fade" id="updateUserModal" tabindex="-1" aria-labelledby="updateUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title fs-5" id="updateUserModalLabel">Editing User</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Error -->
+        <div class="alert alert-danger d-none" role="alert" id="updateUserError">
+          <ul id="updateUserErrorList">
+          </ul>
+        </div>
+
+        <form>
+          <div class="form-group">
+            <label for="">First Name</label>
+            <input type="text" name="first_name" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="">Last Name</label>
+            <input type="text" name="last_name" class="form-control">
+          <div>
+
+          <div class="form-group">
+            <label for="">E-Mail</label>
+            <input type="text" name="email" class="form-control">
+          <div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button id="updateUserBtn" type="submit" class="btn btn-primary">Update User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% block scripts %}
+<script>
+// Send API request to /api/v1/films
+$('#updateUserModal form').submit(function(e) {
+  e.preventDefault();
+
+  const formData = new FormData(this);
+
+  $.ajax({
+    url: '/api/v1/user',
+    type: 'PUT',
+    data: formData,
+    success: function (data) {
+      // Close modal
+      $('#updateUserModal').modal('hide');
+
+      // Refresh page
+      location.reload();
+    },
+    error: function (data) {
+      // Show error
+      $('#updateUserError').removeClass('d-none');
+
+      // Clear error list
+      $('#updateUserErrorList').empty();
+
+      // Loop through errors
+      $.each(data.responseJSON.error, function (key, value) {
+        // Append error to list
+        $('#updateUserErrorList').append('<li>' + value + '</li>');
+      });
+    },
+    cache: false,
+    contentType: false,
+    processData: false
+  });
+});
+
+</script>
+{% endblock %}
